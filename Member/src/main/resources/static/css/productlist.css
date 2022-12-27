@@ -1,0 +1,153 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+#container {
+    width: 100%;
+    height: 1300px;
+
+}
+
+#pro_list_con {
+    font-family: 'Pretendard-Regular';
+    width: 100%;
+    height: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.pro_list_text {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+}
+
+.pro_list_select {
+    width: 80%;
+    height: 100px;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.pro_list_select select {
+    width: 120px;
+    height: 30px;
+    border: 1px solid #e2e2e2;    
+}
+.pro_list_select button{
+	width:80px;
+	height: 30px;
+	border:1px solid #e2e2e2;
+	background-color:#4285F4;
+	opacity:0.6;
+	color:white;
+	font-size: 14px;
+	margin-right: 70px;
+	
+}
+
+.pro_list {
+    width: 90%;
+    height: 1900px;
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.list_box {
+    margin-top: 60px;
+    margin-left: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #e2e2e2;
+    box-shadow: 7px 7px 10px 5px #cbd6d6;
+    border-radius: 5px;
+
+}
+
+.list_box_url {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 150px;
+}
+
+.list_box_url img {
+    width: 100%;
+    height: 100%;
+}
+
+.list_box_name {
+    width: 100%;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.list_box_price {
+    width: 100%;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+/*--------------------------*/
+.list_paging {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width:200px;       
+}
+.list_paging p{
+	width:30%;
+	height: 60px;
+	display:flex;
+	justify-content:space-around;
+	align-content: center;
+		
+}
+@media ( max-width :1180px) {
+	#container {
+		font-family: 'Pretendard-Regular';
+		height: 1800px;
+
+	}
+	#pro_list_con{
+		height:1500px;
+	}
+}
+
+@media ( max-width :920px) {
+	#container {
+		font-family: 'Pretendard-Regular';
+		height: 2200px;
+
+	}
+	#pro_list_con{
+		height:1900px;
+	}
+}
+
+

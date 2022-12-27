@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/header.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link th:href="@{/css/index.css}" rel="stylesheet" />
+<link th:href="@{/css/reset2.css}" rel="stylesheet" />
+<link th:href="@{/css/reset.css}" rel="stylesheet" />
+<title>리스트 페이지</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	
+	$(function(){
+		$("#sch").click(function(){
+			let keyword=$("[id=keyword] :selected").val();
+			let search=$("input[name=search]").val();
+			search_f.submit(keyword,search);								
+		});
+	});
+	
+</script>
+</head>
+
+<body>
+
+	<div id="container">
+		<header th:replace="header :: header"> </header>
+
+
+
+		<main id="index_con">
+			<form class="search_form" name="search_f" action="/search.do" method="get">
+				<p>제품 검색 : &nbsp;</p>
+				<input type="search" name="search">
+				<button type="button" id="sch">검색</button>
+				<select title="검색 유형 선택" name="keyword" id="keyword">
+					<option value="p_total">전체 검색</option>
+					<option value="p_name">제품명</option>
+					<option value="p_content">내용</option>
+				</select>
+			</form>
+			<div class="main_buytag">
+				<div class="buy_text">
+					<h3>인기상품</h3>
+				</div>
+
+				<div class="buy_contentbox">
+					<div class="main_imgbox" th:each="star : ${starlist}" th:if="${starlist!=null}">
+						<a th:href="@{/prodetail.do(p_num=${star.p_num})}" class="img_url"><img th:src="@{/stsimg/}+${star.p_img}"></a>
+						<a th:href="@{/prodetail.do(p_num=${star.p_num})}" class="name_url" th:text="|제품명:${star.p_name}|">OUTTER1</a> <span th:text="|가격:${star.p_price}원|">가격 : PRICE</span>
+					</div>
+
+
+				</div>
+
+				<div class="buy_text">
+					<h3>신상품</h3>
+				</div>
+
+				<div class="buy_contentbox">
+
+
+					<div class="main_imgbox" th:each="date : ${datelist}" th:if="${datelist!=null}">
+						<a th:href="@{/prodetail.do(p_num=${date.p_num})}" class="img_url"><img th:src="@{/stsimg/}+${date.p_img}"></a>
+						<a th:href="@{/prodetail.do(p_num=${date.p_num})}" class="name_url" th:text="|품명:${date.p_name}|">OUTTER1</a> <span th:text="|가격:${date.p_price}원|">가격 : PRICE</span>
+					</div>
+
+
+				</div>
+			</div>
+
+		</main>
+
+
+		<footer th:replace="footer ::footer"></footer>
+
+	</div>
+
+</body>
+
+</html>

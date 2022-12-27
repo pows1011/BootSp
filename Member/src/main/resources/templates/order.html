@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/header.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link th:href="@{/css/order.css}" rel="stylesheet" />
+<link th:href="@{/css/reset2.css}" rel="stylesheet" />
+<link th:href="@{/css/reset.css}" rel="stylesheet" />
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<th:block layout:fragment="script">
+	<script th:inline="javascript">
+    /*<![CDATA[*/
+	
+   	$(function(){
+   		$("button[type='button']").click(function(){
+   			const num=$(this).attr('id');   			
+   			$.ajax({
+   				type:"GET",
+   				url:"/delorder",
+   				data:{
+   					o_num:num
+   					
+   				},success : function(result) {				
+   						alert(result);
+   						location.reload();
+   				},
+   				error : function(e) {
+   					alert('에러');
+   					
+
+   				}
+   			});	
+   			
+   			   				
+   			
+   		});
+   	});	
+    	
+    window.onload = () => {
+      findAllPost();
+    }
+
+
+    // 게시글 리스트 조회
+    function findAllPost() {
+
+      const list =/*[[${olist.list}]]*/"";// PagingResponse의 멤버인 List<T> 타입의 list를 의미
+      if ( !list.length ) { //리스트가 비어있는 경우, "검색 결과가 없다"는 메시지를 행에 출력
+    	  $(".order_line").html('<td colspan="6"><div className="no_data_msg">검색된 결과가 없습니다.</div></td>');    	
+        drawPage(); //페이지네이션 HTML을 제거(초기화)한 후 로직을 종료합니다.
+      }
+
+      const pagination = /*[[${olist.pagination}]]*/"";//PagingResponse의 멤버인 pagination을 의미
+      const params =/*[[${params}]]*/""; // @ModelAttribute로 바로 1ㄷ1 맵핑시킨 값을 받아옴
+      let num = pagination.totalRecordCount - ((params.page - 1) * params.recordSize); // 전체 데이터의 갯수 - ((현재페이지-1)*한페이지의 행의갯수)      
+																						// ex) 100 - ((1-1)*10) = 100
+      drawList(list);
+      drawPage(pagination, params);
+    }
+
+
+    // 리스트 HTML draw
+    // 제품 리스트를 출력
+    function drawList(list) {
+
+      let html = '';
+		                    
+      list.forEach(row => { // list 의 갯수만큼 반복진행 row 라는 변수명으로 list명을 대체함 화살표함수
+        html += `
+        
+			<div class="order_day">
+				<div class="order_tag2">
+					<span>${row.o_name}</span>
+				</div>
+				<div class="order_tag3">
+				<a href="/prodetail.do?p_num=${row.o_num}" class="ord_box_url"> <img src="/stsimg/${row.o_img}"></a>
+				</div>
+				<div class="order_tag1">
+					<span>${row.o_price}</span>
+				</div>
+				<div class="order_tag1">
+					<span>${row.o_quantity}</span>
+				</div>
+				<div class="order_tag2">
+					<span>${row.o_dstate}</span>
+				</div>
+				<div class="order_tag1">
+					<button type="button" class="del_btn" id="${row.o_num}">주문취소</button>
+				</div>
+			</div>			
+		
+         
+        `;
+      })
+      $(".order_line").html(html);      
+    }
+
+
+    // 페이지 HTML draw  하단의 버튼에 해당하는 스크립트로 페이징의 핵심
+    function drawPage(pagination, params) {
+		//SearchDto의 기본 Default값을 바탕으로 mybatis의 count를 같이 받아와 계산후 저장시켜둔 pagingnation과 SearchDto를 받아옴
+      if ( !pagination || !params ) {
+    	  // pagination, params가 존재하지 않는다면 해당 스크립트를 출력
+        document.querySelector('.paging').innerHTML = '';
+        order_pagbtn
+        throw new Error('Missing required parameters...');
+      }
+
+      let html = '';
+      
+      // 첫 페이지, 이전 페이지
+      
+      if (pagination.existPrevPage) { // 현재페이지에서 보이는 스타트페이지가 1이 아닐경우 해당 스크립트의 HTML이 만들어진다. ( <  이전 페이지 ) 
+        html += `
+            <a href="javascript:void(0);" onclick="movePage(1)" class="page_bt first">첫 페이지</a>
+            <a href="javascript:void(0);" onclick="movePage(${pagination.startPage - 1})" class="page_bt prev">이전 페이지</a>
+        `;
+      }
+
+      // 페이지 번호
+      html += '<p>';
+      		// 1,2,3,4,5~~~ 페이지의 번호를 만들어내는 구문
+      for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+        html += (i !== params.page)
+                ? `<a href="javascript:void(0);" onclick="movePage(${i});">${i}</a>`
+                : `<span class="on">${i}</span>`
+      }
+      html += '</p>';
+
+      // 다음 페이지, 마지막 페이지
+      if (pagination.existNextPage) {
+        html += `
+            <a href="javascript:void(0);" onclick="movePage(${pagination.endPage + 1});" class="page_bt next">다음 페이지</a>
+            <a href="javascript:void(0);" onclick="movePage(${pagination.totalPageCount});" class="page_bt last">마지막 페이지</a>
+        `;
+      }
+      $(".paging").html(html);      
+    }
+    // 페이지 이동
+    function movePage(page) {
+      const queryParams = {
+        page: (page) ? page : 1,
+        recordSize: 10,
+        pageSize: 10
+      }
+      location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+    }
+    	
+	
+    /*]]>*/
+  </script>
+</th:block>
+</head>
+
+<body>
+
+	<div id="container">
+		<header th:replace="header :: header"> </header>
+
+
+		<main id="order_main_con">
+			<div id="order_box">
+				<div class="order_text_line">
+					<div class="order_day_text">
+						<div class="order_text2">
+							<span>제품명</span>
+						</div>
+						<div class="order_text3">
+							<span>이미지</span>
+						</div>
+						<div class="order_text1">
+							<span>가격</span>
+						</div>
+						<div class="order_text1">
+							<span>수량</span>
+						</div>
+						<div class="order_text2">
+							<span>배송상태</span>
+						</div>
+						<div class="order_text1">
+							<span>주문상태</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="order_line"></div>
+
+
+
+			</div>
+			<div class="paging"></div>
+
+		</main>
+
+		<footer th:replace="footer ::footer"></footer>
+
+	</div>
+
+</body>
+
+</html>

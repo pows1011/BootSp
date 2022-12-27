@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.olg">
+
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/header.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link th:href="@{/css/cart.css}" rel="stylesheet" />
+<link th:href="@{/css/reset2.css}" rel="stylesheet" />
+<link th:href="@{/css/reset.css}" rel="stylesheet" />
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function() {		
+		$("#delbtn").click(function(){
+			
+		});
+		
+		
+		
+		$("select").on('change', function() {
+			let cla=$(this).attr("class");
+			let chk = $(this).val();
+			if (chk == "10+") {		
+				$("."+cla).replaceWith($("<input/>").attr({
+					type : 'text',					
+					name : 'o_quantity',
+					class : 'o_quantity_'+cla,
+					placeholder:'입력'
+				}));
+				 $('.qu'+cla).show();
+				 $("."+cla).focus();
+			}
+		});
+	});
+</script>
+</head>
+
+<body>
+
+	<div id="container">
+		<header th:replace="header :: header"> </header>
+
+		<main id="cart_main_con">
+			<form action="/addorder" class="cart_form" th:if="${session.type==1}">
+				<div class="cart_main_box">
+					<div class="cart_tag_box">
+						<ul class="cart_tag_ul1">
+							<li class="cart_li0">선택</li>
+							<li class="cart_li1">이미지</li>
+							<li class="cart_li2">제품명</li>
+							<li class="cart_li3">가격</li>
+							<li class="cart_li4">수량</li>
+							<li class="cart_li5">색상</li>
+							<li class="cart_li6">사이즈</li>
+						</ul>
+
+						<ul class="cart_tag_ul" th:each="ol,numStat :${ol}">
+							<li class="cart_li0"><input type="checkbox" name="check" th:value="${ol.o_num}"></li>
+							<li class="cart_li1"><a th:href="@{/prodetail.do(p_num=${ol.o_num})}"><img th:src="@{/stsimg/}+${ol.o_img}"></a></li>
+							<li class="cart_li2"><a th:href="@{/prodetail.do(p_num=${ol.o_num})}" th:text="${ol.o_name}">제품명</a></li>
+							<li class="cart_li3" th:text="${ol.o_price}">가격</li>
+							<li class="cart_li4"><select name="o_quantity" th:class="${numStat.count}">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10+">10+</option>
+							</select>
+								<p th:text="|${pl[numStat.index].p_quantity}개남음|" th:class="|quhide qu${numStat.count}|"></p></li>
+							<li class="cart_li5" th:text="${ol.o_color}">색상</li>
+							<li class="cart_li6" th:text="${ol.o_size}">사이즈</li>
+						</ul>
+						<div class="car_btn_box">
+							<button type="submit">구매하기</button>
+							<button type="button" id="delbtn">삭제</button>
+						</div>
+					</div>
+
+				</div>
+
+			</form>
+
+
+
+			<form action="" class="cart_form" th:if="${session.type==2}">
+				<div class="cart_main_box">
+					<div class="cart_tag_box">
+						<ul class="cart_tag_ul1">
+							<li class="selcart_li1">제품명</li>
+							<li class="selcart_li2">가격</li>
+							<li class="selcart_li3">색상</li>
+							<li class="selcart_li4">사이즈</li>
+							<li class="selcart_li5">구매수량</li>
+							<li class="selcart_li6">배송상태</li>
+						</ul>
+
+						<ul class="cart_tag_ul" th:each="ol,numStat :${ol}">
+							<li class="selcart_li1"><a th:href="@{/prodetail.do(p_num=${ol.o_num})}" th:text="${ol.o_name}">제품명</a></li>
+							<li class="selcart_li2" th:text="${ol.o_price}">가격</li>
+							<li class="selcart_li3" th:text="${ol.o_color}">색상</li>
+							<li class="selcart_li4" th:text="${ol.o_size}">사이즈</li>
+							<li class="selcart_li5" th:text="${ol.o_quantity}"></li>
+							<li class="selcart_li6"><select name="o_quantity" th:class="${numStat.count}">
+									<option value="1">상품준비중</option>
+									<option value="2">배송준비중</option>
+									<option value="3">배송시작</option>
+									<option value="4">배송중</option>
+									<option value="5">배송완료</option>
+							</select>
+						</ul>
+						<div class="car_btn_box">
+							<button type="submit">구매하기</button>
+						</div>
+					</div>
+
+				</div>
+
+			</form>
+		</main>
+
+
+		<footer th:replace="footer ::footer"></footer>
+
+	</div>
+
+</body>
+
+</html>

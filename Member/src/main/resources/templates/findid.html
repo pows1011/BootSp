@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/header.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link th:href="@{/css/login.css}" rel="stylesheet" />
+<link th:href="@{/css/reset2.css}" rel="stylesheet" />
+<link th:href="@{/css/reset.css}" rel="stylesheet" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div id="container">
+		<header th:replace="header :: header"> </header>
+
+
+		<main id="login_con">
+			<div class="login_box">
+				<h3>아이디 찾기</h3>
+
+				<form class="login_text" method="post" action="/login">
+					<input type="email" name="email" id="email" placeholder="이메일 입력"> 
+
+					<button type="button">이메일 전송</button>
+					
+				</form>			
+			</div>
+
+
+		</main>
+
+
+		<footer th:replace="footer ::footer"></footer>
+
+	</div>
+
+</body>
+
+</html>

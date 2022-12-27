@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/header.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link th:href="@{/css/productdetail.css}" rel="stylesheet" />
+<link th:href="@{/css/reset2.css}" rel="stylesheet" />
+<link th:href="@{/css/reset.css}" rel="stylesheet" />
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript" th:inline="javascript">
+
+/*<![CDATA[*/
+	
+
+	
+	const drawStar = (target) => {
+		  $(`.star span`).css({ width: `${target.value * 20}%` });
+		}
+	
+	
+	function Chk(url) {
+		let chk;
+		if (url == '/prodel.do') {
+			chk = confirm("제품을 삭제 하시겠습니까?");
+		} else {
+			chk = confirm("제품을 수정 하시겠습니까?");
+		}
+		let p_num = $("#r_pronum").val();
+		let urltxt = url + "?p_num=" + p_num;
+		if (chk) {
+
+			document.topform.action = urltxt;
+			document.topform.submit();
+		} else {
+			alert("작동취소");
+		}
+	}
+	
+	
+	  function drawList(list) {
+
+	      let html = "";
+
+	      list.forEach(result => {
+	    	  html += "<div class='review'>";
+	  		html += "<label class='review_id'>";
+	  		html += "<p class='p1'>작성자:" + result.r_writer
+	  				+ " </p>  <p class='p2'>등록날짜:" + result.r_date
+	  				+ "</p><p class='p3'>평점:" + result.r_star + "</p>   </label>";
+	  		html += "<label class='review_text'>";
+	  		html += "<p>CONTENT:" + result.r_content + " </p>";
+	  		if(result.r_imgpath!="" && result.r_imgpath!=null){
+	  			html += "<a href='#'><img src='/stsreview/"+result.r_imgpath+"'></a></label></div>";	
+	  		}else{
+	  			html+="</label></div>";
+	  		}
+	  		
+	      })
+	      
+	      $("#reviewcon").html(html);
+	    }
+	
+	function drawPage(pagination,params){
+		if ( !pagination || !params ) {	        
+	    	  $(".btn_box").html("");
+	        throw new Error('Missing required parameters...');
+	      }
+
+		let html="";
+	     // 첫 페이지, 이전 페이지
+	     
+		 if (pagination.existPrevPage) { 
+		        html += `
+		            <a href="javascript:void(0);" onclick="movePage(1)">첫 페이지</a>
+		            <a href="javascript:void(0);" onclick="movePage("+ pagination.startPage-1 +")">이전 페이지</a>
+		        `;
+		      }
+		 // 페이지 번호
+	      html += '<p>';
+	      		// 1,2,3,4,5~~~ 페이지의 번호를 만들어내는 구문
+	      for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+	        if(i !== params.page){
+	        	html+="<a href='javascript:void(0);' class='"+i+"'onclick='movePage("+i+");'>"+i+"</a>";
+	        }else{
+	        	html+="<span class='on' id='on'>"+i+"</span>";
+	        }
+	        			              
+	      }
+	      html += '</p>';
+
+	      // 다음 페이지, 마지막 페이지
+	      if (pagination.existNextPage) {
+	        html += `
+	            <a href="javascript:void(0);" onclick="movePage("+pagination.endPage+1 +");">다음 페이지</a>
+	            <a href="javascript:void(0);" onclick="movePage("+pagination.totalPageCount+");" >마지막 페이지</a>
+	        `;
+	      }
+	      $(".btn_box").html(html);	      
+	    }
+	
+	
+	 function movePage(page) {
+		 const r_pronum = $("#r_pronum").val();
+	      $.ajax({
+				type:"GET",
+				url:"/reviewlist",
+				data:{
+					r_pronum:r_pronum,
+					page: (page) ? page : 1,
+					        recordSize: 10,
+					        pageSize: 10
+					
+				},
+				success : function(result) {
+					let prolist=result.prolist;
+					let params=result.params;
+					let pagination=result.pagination;				
+					drawList(prolist);
+						drawPage(pagination,params);
+				},
+				error : function(e) {
+					alert('에러');
+
+				}
+			});	
+	    }
+	
+	
+	$(function() {
+		const r_pronum = $("#r_pronum").val();
+		$("select").on('change', function() {			
+			let chk = $(this).val();
+			if (chk == "10+") {		
+				$(".o_quantity").replaceWith($("<input/>").attr({
+					type : 'text',					
+					name : 'o_quantity',
+					class : 'o_quantity',
+					placeholder:'입력'
+				}));				 
+				 $(".o_quantity").focus();
+			}
+		});
+		
+		
+		$.ajax({
+			type:"GET",
+			url:"/reviewlist",
+			data:{
+				r_pronum:r_pronum,
+				 recordSize: 10,
+			        pageSize: 10
+			},success : function(result) {				
+					let prolist=result.prolist;
+					let params=result.params;
+					let pagination=result.pagination;					
+					drawList(prolist);					
+					drawPage(pagination,params);
+			},
+			error : function(e) {
+				alert('에러');
+
+			}
+		});	
+
+		$("#buy_direct").click(function() {			
+			const page=/*[[${session.id}]]*/"";
+
+			// select box Name로 접근하여 선택된 값 읽기
+			const p_color=$("select[name=colortag]").val();
+			const p_size=$("select[name=size]").val();
+			const o_quantity=$("select[name=o_quantity]").val();
+			if(p_color=="" || p_color==null){
+				alert('색상을 지정하세요');
+				return false;
+			}
+			if(p_size=="" || p_size==null){
+				alert('사이즈를 지정하세요');
+				return false;
+			}
+			if(page==null||page==""){
+				alert('로그인이 필요합니다');
+				return false;
+			}else{
+				$.ajax({
+					type : "GET",
+					url : "/DirectOrder",
+					data : {
+						o_quantity : o_quantity,
+						p_num : r_pronum,
+						p_color : p_color,
+						p_size : p_size
+					},				
+					success : function(result) {
+						if(result){
+							alert('구매완료');
+							
+						}
+											
+					},
+					error : function(e) {
+						alert('구매실패');
+
+					}
+				});
+			}
+			
+		});
+		
+		
+
+		$("#add_cart").click(function() {			
+			const page=/*[[${session.id}]]*/"";
+
+			// select box Name로 접근하여 선택된 값 읽기
+			const p_color=$("select[name=colortag]").val();
+			const p_size=$("select[name=size]").val();
+			const o_quantity=$("select[name=o_quantity]").val();
+			if(p_color=="" || p_color==null){
+				alert('색상을 지정하세요');
+				return false;
+			}
+			if(p_size=="" || p_size==null){
+				alert('사이즈를 지정하세요');
+				return false;
+			}
+			if(page==null||page==""){
+				alert('로그인이 필요합니다');
+				return false;
+			}else{
+				$.ajax({
+					type : "GET",
+					url : "/addcart",
+					data : {
+						o_quantity : o_quantity,
+						p_num : r_pronum,
+						p_color : p_color,
+						p_size : p_size
+					},				
+					success : function(result) {
+						if(result==true){
+							alert('추가성공');
+							
+						}
+											
+					},
+					error : function(e) {
+						alert('이미 장바구니에 존재하는 상품입니다');
+
+					}
+				});
+			}
+			
+		});
+		
+		$("#favorite_btn").click(function() {			
+			const page=/*[[${session.id}]]*/"";
+			if(page==null||page==""){
+				alert('로그인이 필요합니다');
+				return false;
+			}else{
+				$.ajax({
+					type : "GET",
+					url : "/favorite",
+					data : {
+						o_num : r_pronum,				
+					},				
+					success : function(result) {
+						if(result==true){
+								$(".favorite").css("color","red");				
+						}
+											
+					},
+					error : function(e) {
+						alert('이미 찜목록에 존재 합니다');
+
+					}
+				});
+			}
+			
+		});
+		
+		
+		$("#review_btn").click(function() {
+			let pgtxt;
+			if($("#on").length){
+				pgtxt=$(".on")[0].innerHTML;	
+			}else{
+				pgtxt=1;	
+			}
+					
+			alert("aaa"+pgtxt);
+			const page=/*[[${session.id}]]*/"";
+			if(page==null||page==""){
+				alert('로그인이 필요합니다');
+				return false;
+			}else{						
+				const form = $("#myform")[0];
+				let data = new FormData(form);
+				alert(data);
+				$.ajax({
+					url : "/addreview",
+					type : "POST",
+					enctype : "multipart/form-data",
+					data : data,
+					processData : false,
+					contentType : false,
+					success : function(result) {
+						movePage(pgtxt);
+						$("#rvcnt").text("상품리뷰("+result.p_reviewcnt+")개");						
+						$("#rvstar").text("평점("+result.p_reviewstar+")");												
+					},
+					error : function(e) {
+						console.log("ERROR : ", e);
+						alert("fail");
+					}
+				});
+			}			
+		});
+		$('.img1').click(function() {
+			let value = $(this).attr("src");
+			$(".pro_main_img").attr("src", value);
+		});
+	});
+	
+	   /*]]>*/
+</script>
+</head>
+
+<body>
+
+	<div id="container">
+		<header th:replace="header :: header"> </header>
+
+
+		<main id="prodetail_con">
+
+			<div id="prodetail_topbox">
+				<div class="prodetail_img">
+					<label>
+						<p th:text="|상품명 : ${p.p_name}|">이름:아우터1</p>
+					</label>
+					<label>
+						<span th:text="|가격 : ${p.p_price}|">가격:3000원</span>
+
+					</label>
+					<img class="pro_main_img" th:src="@{/stsimg/}+${img[0]}">
+					<div class="pro_img_screen">
+						<div class="detail_subimg" th:each="i:${img}">
+							<img th:src="@{/stsimg/}+${i}" class="img1">
+						</div>
+					</div>
+				</div>
+				<div class="prodetail_text">
+					<div class="protext_tagbox">
+						<label class="protext_tag">
+							<p th:text="|판매자 : ${p.p_id}|">판매자 : KIM</p>
+						</label>
+
+					</div>
+					<div class="protext_tagbox">
+						<label class="protext_tag">
+							<p th:text="|남은 수량 : ${p.p_quantity}개|"></p>
+							<select name="o_quantity" class="o_quantity">
+								<option value="1" selected>1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10+">10+</option>
+							</select>
+						</label>
+					</div>
+					<div class="protext_tagbox">
+						<label class="protext_tag">
+							<p>색상 선택 :</p>
+
+							<select name="colortag" class="pro_sel1">
+								<option value="">---</option>
+								<option th:each="c:${color}" th:value="${c}" th:text="${c}"></option>
+
+							</select>
+
+						</label>
+
+
+					</div>
+					<div class="protext_tagbox">
+						<label class="protext_tag">
+							<p>사이즈 선택 :</p>
+							<select name="size" class="pro_sel2">
+
+								<option value="">---</option>
+								<option th:each="s:${size}" th:value="${s}" th:text="${s}"></option>
+
+
+							</select>
+						</label>
+
+					</div>
+					<div class="protext_tagbox">
+						<label class="protext_tag">
+
+							<p th:text="|최종 수정일 : ${p.p_date}|" th:if="${p.p_ndate==null}">최종 수정일</p>
+							<p th:text="|최종 수정일 : ${p.p_ndate}|" th:if="${p.p_ndate!=null}">최종 수정일</p>
+
+						</label>
+
+					</div>
+
+					<div class="protext_areabox">
+						<label class="protext_tagtarea">
+							<p>상세설명</p>
+						</label>
+						<label class="protext_tarea">
+							<textarea style="resize: none;" readonly th:text="${p.p_content}">여기 텍스트</textarea>
+						</label>
+					</div>
+
+					<div class="pro_topbtn" th:if="${session.id !=p.p_id}">
+						<button id="add_cart" type="button">
+							<img src="/images/cart.svg">장바구니
+						</button>
+						<button id="buy_direct" type="button">
+							<img src="/images/buy.svg">구매
+						</button>
+						<button id="favorite_btn" type="button">
+						<span class="material-symbols-outlined favorite"> favorite<label>찜하기</label>
+						</span>
+						</button>
+					</div>
+
+					<div class="pro_topbtn" th:if="${session.id ==p.p_id}">
+						<form action="/prodel.do" id="topform" name="topform" method="post">
+							<button type="button" th:onclick="|Chk('/prodel.do')|">
+								<img src="/images/delete.svg">삭제하기
+							</button>
+							<button type="button" th:onclick="|Chk('/uppage')|">
+								<img src="/images/edit.svg">수정하기
+							</button>
+						</form>
+
+
+					</div>
+
+				</div>
+
+
+			</div>
+
+			<div id="prodetail_botbox">
+
+				<label class="pro_review_tag" th:if="${p.p_reviewstar!=null && p.p_reviewcnt!=null}">
+					<p th:text="|상품리뷰(${p.p_reviewcnt})개|" id="rvcnt"></p>
+					<p th:text="| 평점(${p.p_reviewstar})|" id="rvstar"></p>
+				</label>
+				<form action="/addreview.do" class="mb-3" name="myform" id="myform" method="post">
+					<input type="hidden" name="r_pronum" id="r_pronum" th:value="${p.p_num}">
+
+					<div class="star_box">
+
+						<span class="star"> ★★★★★ <span>★★★★★</span> <input type="range" name="r_star" oninput="drawStar(this)" value="0" step="0.5" min="0" max="5">
+						</span> <span class="text-bold">별점을 선택해주세요</span>
+					</div>
+
+
+					<div class="review_textbox">
+						<textarea placeholder="리뷰를 작성 하세요" name="r_content" id="r_content" style="resize: none;"></textarea>
+						<input type="file" name="p_img" style="display: none; cursor: pointer;" id="p_img" multiple="multiple">
+						<label for="p_img" class="form_set2">
+							<img src="/images/imgtag.png" style="cursor: pointer">
+						</label>
+						<button type="button" id="review_btn">등록</button>
+					</div>
+
+
+				</form>
+
+
+				<div class="reviewcon" id="reviewcon"></div>
+
+
+				<div class="btn_box"></div>
+			</div>
+
+
+		</main>
+
+		<footer th:replace="footer ::footer"></footer>
+
+	</div>
+
+</body>
+
+</html>

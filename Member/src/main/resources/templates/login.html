@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/header.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link th:href="@{/css/login.css}" rel="stylesheet" />
+<link th:href="@{/css/reset2.css}" rel="stylesheet" />
+<link th:href="@{/css/reset.css}" rel="stylesheet" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div id="container">
+		<header th:replace="header :: header"> </header>
+
+
+		<main id="login_con">
+			<div class="login_box">
+				<h3>LOGIN</h3>
+
+				<form class="login_text" method="post" action="/login">
+					<input type="text" name="id" id="id" placeholder="ID 입력"> <input
+						type="password" name="pwd" id="pwd" placeholder="패스워드 입력">
+
+					<button type="submit">로그인</button>
+
+					<button type="button" th:onclick="|location.href='@{/addmember}'|">회원
+						가입</button>
+				</form>
+				<div class="login_search">
+					<a href="/findid">아이디가 생각나지 않을때</a> <a href="#">비밀번호가 생각나지 않을때</a>
+				</div>
+			</div>
+
+
+		</main>
+
+
+		<footer th:replace="footer ::footer"></footer>
+
+	</div>
+
+</body>
+
+</html>

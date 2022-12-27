@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.member.mapper.ProductMapper">
+
+	<sql id="productColumn">
+		p_id
+		, p_name
+		, p_img
+		, p_originimg
+		, p_price
+		, p_content
+		,
+		p_quantity
+		, p_color
+		, p_size
+		, p_category
+	</sql>
+	<sql id="reviewColumn">
+		r_writer
+		, r_content
+		, r_imgpath
+		, r_pronum
+		, r_star
+	</sql>
+
+	<insert id="addProduct" parameterType="com.member.model.Product">
+		INSERT INTO product(
+		<include refid="productColumn" />
+		) VALUES(
+		#{p_id}
+		, #{p_name}
+		, #{p_img}
+		, #{p_originimg}
+		, #{p_price}
+		,
+		#{p_content}
+		, #{p_quantity}
+		, #{p_color}
+		, #{p_size}
+		, #{p_category}
+		)
+	</insert>
+
+
+	<resultMap type="com.member.model.Product" id="ProductMap">
+		<id property="p_num" column="p_num" /> <!-- id에는 프라이머리키 -->
+		<result property="p_id" column="p_id" />
+		<result property="p_name" column="p_name" />
+		<result property="p_img" column="p_img" />
+		<result property="p_originimg" column="p_originimg" />
+		<result property="p_price" column="p_price" />
+		<result property="p_content" column="p_content" />
+		<result property="p_quantity" column="p_quantity" />
+		<result property="p_color" column="p_color" />
+		<result property="p_size" column="p_size" />
+		<result property="p_date" column="p_date" />
+		<result property="p_ndate" column="p_ndate" />
+		<result property="p_dstate" column="p_dstate" />
+		<result property="p_ostate" column="p_ostate" />
+		<result property="p_category" column="p_category" />
+		<result property="p_reviewstar" column="p_reviewstar" />
+		<result property="p_reviewcnt" column="p_reviewcnt" />
+	</resultMap>
+
+	<select id="List_Sel" parameterType="hashMap"
+		resultMap="ProductMap">
+			SELECT * FROM product ORDER BY ${selector} ${selectorOrder}
+			LIMIT #{limitstart},#{recordsize}			
+
+	</select>
+	<select id="Search" parameterType="hashMap"
+		resultMap="ProductMap">
+		SELECT * FROM product WHERE ${keyword} like
+		CONCAT('%',#{search},'%') LIMIT #{limitstart},#{recordsize}
+	</select>
+
+	<select id="SearchTotal" parameterType="hashMap"
+		resultMap="ProductMap">
+		SELECT * FROM product WHERE p_content LIKE
+		CONCAT('%',#{total},'%') OR p_name LIKE CONCAT('%',#{total},'%') LIMIT
+		#{limitstart},#{recordsize}
+	</select>
+	<select id="Productstar" resultMap="ProductMap">
+		SELECT
+		*
+		FROM product
+		ORDER BY
+		p_reviewstar DESC LIMIT 0,5
+	</select>
+	<select id="Productdate" resultMap="ProductMap">
+		SELECT
+		*
+		FROM product
+		ORDER BY
+		p_date DESC LIMIT 0,5
+	</select>
+	<select id="getProduct" parameterType="int"
+		resultMap="ProductMap">
+		SELECT * FROM product WHERE p_num=#{p_num}
+	</select>
+	<update id="editStar" parameterType="com.member.model.Product">
+		UPDATE product SET
+		p_reviewstar=#{p_reviewstar},p_reviewcnt=p_reviewcnt+1
+		WHERE
+		p_num=#{p_num}
+	</update>
+
+
+	<delete id="DelProduct" parameterType="int">
+		DELETE FROM product WHERE
+		p_num=#{p_num}
+	</delete>
+	<delete id="EditimgPro" parameterType="com.member.model.Product">
+		UPDATE product SET
+		p_img=#{p_img} ,p_originimg=#{p_originimg} WHERE
+		p_num=#{p_num}
+	</delete>
+
+
+	<update id="EditProduct"
+		parameterType="com.member.model.Product">
+		UPDATE product SET
+		p_id=#{p_id}
+		, p_name=#{p_name}
+		,
+		p_img=#{p_img}
+		, p_originimg=#{p_originimg}
+		,
+		p_price=#{p_price}
+		,
+		p_content=#{p_content}
+		, p_quantity=#{p_quantity}
+		,
+		p_color=#{p_color}
+		,
+		p_size=#{p_size}
+		, p_ndate=NOW()
+		,
+		p_category=#{p_category}
+		WHERE
+		p_num=#{p_num}
+	</update>
+
+
+	<resultMap type="com.member.model.Review" id="ReviewMap">
+		<id property="r_num" column="r_num" /> <!-- id에는 프라이머리키 -->
+		<result property="r_writer" column="r_writer" />
+		<result property="r_content" column="r_content" />
+		<result property="r_imgpath" column="r_imgpath" />
+		<result property="r_date" column="r_date" />
+		<result property="r_pronum" column="r_pronum" />
+		<result property="r_star" column="r_star" />
+	</resultMap>
+
+	<insert id="addReview" parameterType="com.member.model.Review">
+		INSERT INTO review(
+		<include refid="reviewColumn" />
+		) VALUES(
+		#{r_writer}
+		,#{r_content}
+		,#{r_imgpath}
+		,#{r_pronum}
+		,#{r_star}
+		)
+	</insert>
+
+
+
+
+	<select id="PagingList"
+		parameterType="com.member.model.SearchDto" resultMap="ProductMap">
+		SELECT * FROM
+		product LIMIT #{pagination.limitStart},#{recordSize}
+	</select>
+	<select id="Category" parameterType="hashMap"
+		resultMap="ProductMap">
+		SELECT * FROM product WHERE p_category=#{p_category} LIMIT
+		#{limitstart},#{recordsize}
+	</select>
+	<select id="count" resultType="int">
+		SELECT COUNT(*) FROM product
+	</select>
+	<select id="category_count" parameterType="String"
+		resultType="int">
+		SELECT COUNT(*) FROM product WHERE p_category=#{p_category}
+	</select>
+	<select id="AllReview" parameterType="hashMap"
+		resultMap="ReviewMap">
+		SELECT * FROM review WHERE r_pronum=#{r_pronum} LIMIT
+		#{limitstart},#{recordsize}
+	</select>
+	<select id="reviewChk" parameterType="int" resultMap="ReviewMap">
+		SELECT *
+		FROM review WHERE r_pronum=#{r_pronum}
+	</select>
+	<select id="Review_count" parameterType="int" resultType="int">
+		SELECT
+		COUNT(*) FROM review WHERE r_pronum=#{r_pronum}
+	</select>
+	<select id="SearchCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM product WHERE ${keyword} like
+		CONCAT('%',#{search},'%')
+	</select>
+	<select id="SearchTotCount" parameterType="String"
+		resultType="int">
+		SELECT COUNT(*) FROM product WHERE p_content LIKE
+		CONCAT('%','#{total}','%')
+		OR p_name LIKE CONCAT('%',#{total},'%')
+	</select>
+
+</mapper>

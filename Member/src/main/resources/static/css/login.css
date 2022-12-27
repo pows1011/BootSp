@@ -1,0 +1,79 @@
+@font-face {
+	font-family: 'Pretendard-Regular';
+	src:
+		url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
+		format('woff');
+	font-weight: 400;
+	font-style: normal;
+}
+
+#container {
+	width: 100%;
+	height: 1800px;
+}
+
+#login_con {
+	width: 100%;
+	height: 1540px;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.login_box {
+	font-family: 'Pretendard-Regular';
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 700px;
+	height: 800px;
+	border: 1px solid #e2e2e2;
+}
+
+.login_box h3 {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.login_text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 500px;
+	height: 600px;
+}
+
+.login_text input {
+	border: 1px solid #e2e2e2;
+	margin-bottom: 20px;
+	width: 60%;
+	height: 10%;
+	font-size: 20px;
+}
+
+.login_text button {
+	font-family: 'Pretendard-Regular';
+	border: 1px solid #e2e2e2;
+	width: 60%;
+	height: 10%;
+	margin: 20px;
+	font-size: 24px;
+}
+
+.login_text button:hover {
+	background-color: #4285F4;
+}
+
+.login_search {
+	width: 100%;
+	height: 10%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.login_search a:hover {
+	color: blue;
+}

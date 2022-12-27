@@ -1,0 +1,127 @@
+#container {
+	height: 2300px;
+}
+
+#order_main_con {
+	width: 100%;
+	height: 1700px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+#order_box {
+	width: 90%;
+	height: 1500px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.order_text_line {
+	width: 100%;
+	height: 50px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+}
+
+.order_day_text {
+	width: 100%;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #e2e2e2;
+}
+
+.order_line {
+	width: 100%;
+	height: 1400px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.order_day {
+	width: 100%;
+	height: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #e2e2e2;
+}
+
+.order_tag1, .order_text1 {
+	width: 10%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.order_tag2, .order_text2 {
+	width: 20%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.order_tag3, .order_text3 {
+	width: 200px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ord_box_url {
+	width: 100%;
+	height: 100%;
+}
+
+.ord_box_url img {
+	width: 100%;
+	height: 100%;
+}
+
+.order_day_price {
+	width: 100%;
+	height: 30px;
+	display: flex;
+	align-items: flex-end;
+	justify-content: flex-end;
+}
+
+.order_day button {
+	width: 70px;
+	height: 30px;
+	background-color: #e2e2e2;
+}
+
+.paging {
+	width: 100%;
+	height: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@media ( max-width :920px) {
+	.order_text1,.order_tag1 {
+		width:15%;
+		height:100%;
+	}
+	.order_text2,.order_tag2 {
+		width:25%;
+		height:100%;
+	}
+	.order_text3,.order_tag3 {
+		display: none;
+	}
+}

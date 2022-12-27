@@ -1,0 +1,462 @@
+@font-face {
+	font-family: 'Pretendard-Regular';
+	src:
+		url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
+		format('woff');
+	font-weight: 400;
+	font-style: normal;
+}
+
+* {
+	image-rendering: -webkit-optimize-contrast;
+	/* chrome(비표준) */
+	transform: translateZ(0);
+	backface-visibility: hidden;
+}
+
+#container {
+	font-family: 'Pretendard-Regular';
+	height: 2700px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+#prodetail_con {
+	height: 2400px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+#prodetail_topbox {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 80%;
+	height: 800px;
+	border: 2px solid #e2e2e2;
+	box-shadow: 5px 5px 15px 5px #d8d6d6;
+}
+
+#prodetail_botbox {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 80%;
+	height: 1400px;
+}
+
+/*---------------------------컨테이너 (박스 사이즈 설정)-------------------------------*/
+.prodetail_img {
+	width: 400px;
+	height: 600px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.prodetail_img label {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+	width: 400px;
+}
+
+.prodetail_img p, .prodetail_img span {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.pro_main_img {
+	width: 400px;
+	height: 400px;
+}
+
+.pro_img_screen {
+	display: flex;
+	align-items: center;
+	height: 100px;
+	width: 400px;
+}
+
+.detail_subimg {
+	height: 100px;
+	width: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.detail_subimg img {
+	box-shadow: 5px 5px 10px 5px rgb(218, 218, 218);
+	margin: 10px;
+	width: 50px;
+	height: 50px;
+}
+
+.img1 {
+	cursor: pointer;
+}
+
+/*---------------------상단 박스 좌측 제품명,가격,이미지-----------------------*/
+.prodetail_text {
+	width: 700px;
+	height: 700px; /*img hei=600 text hei=700*/
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.protext_tagbox {
+	width: 100%;
+	height: 10%;
+	flex-direction: column;
+	display: flex;
+	align-items: center;
+}
+
+.protext_tag {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+.o_quantity{
+	margin-left: 20px;
+	width:100px;
+	height: 20px;
+}
+
+.protext_tag p {
+	margin-left: 20px;
+}
+
+.pro_sel1 {
+	width: 120px;
+	height: 30%;
+	margin-left: 20px;
+}
+
+.pro_sel2 {
+	width: 60px;
+	height: 30%;
+	margin-left: 20px;
+}
+
+.protext_areabox {
+	height: 50%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.protext_tagtarea {
+	height: 10%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.protext_tarea {
+	width: 100%;
+	height: 90%;
+}
+
+.protext_tarea textarea {
+	border: 1px solid #e2e2e2;
+	width: 100%;
+	height: 100%;
+}
+
+.pro_topbtn {
+	width: 100%;
+	height: 10%;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+#topform {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.material-symbols-outlined {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 90px;
+	height: 40px;
+	cursor: pointer;
+	margin-right: 50px;
+	font-weight: bold;
+	font-size: 26px;
+}
+
+.material-symbols-outlined label {
+	font-size: 12px;
+	font-weight: bold;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.pro_topbtn button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	width: 100px;
+	height: 40px;
+	border-radius: 10px;
+}
+
+/*------------------------------Top Box 완료 ------------------------*/
+
+/* BOT BOX = hei 1100*/
+.pro_review_tag {
+	width: 70%;
+	height: 50px;
+	display: flex;
+	align-items: center;
+}
+
+.pro_review_tag p {
+	font-size: 24px;
+	font-weight: bold;
+	margin:10px;
+}
+
+#myform {
+	margin-top: 20px;
+	width: 70%;
+	height: 120px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+}
+
+#myform img {
+	width: 50px;
+	height: 50px;
+}
+
+.review_textbox {
+	width: 100%;
+	height: 80px;
+	display: flex;
+	align-items: center;
+}
+
+.review_textbox textarea {
+	width: 80%;
+	height: 100%;
+	border: 1px solid #e2e2e2;
+}
+
+.review_textbox label {
+	width: 10%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.review_textbox button {
+	width: 10%;
+	height: 100%;
+	background-color: #d8d6d6;
+}
+
+.reviewcon {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	margin-top: 20px;
+	height: 1000px;
+	width: 80%;
+}
+
+.review {
+	width: 100%;
+	height: 100px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	border: 1px solid #e2e2e2;
+}
+
+.review_id {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	width: 90%;
+	height: 30px;
+	border-bottom: 1px solid #e2e2e2;
+}
+
+.p1 {
+	width: 50%;
+}
+
+.p2 {
+	width: 40%;
+}
+
+.p3 {
+	width: 10%;
+}
+
+.review_text {
+	display: flex;
+	width: 90%;
+	height: 70px;
+}
+
+.review_text p {
+	width: 90%;
+	height: 100%;
+}
+
+.review_text a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 10%;
+	height: 100%;
+}
+
+.review_text img {
+	width: 80%;
+	height: 80%;
+}
+
+.btn_box {
+	width: 100%;
+	height: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.btn_box p{
+	display: flex;
+	justify-content:center;
+	align-items: center;
+	width:100%;
+	height:100px;
+}
+.btn_box p a,
+.btn_box p span
+{
+	margin:10px;
+}
+
+.bot_btn {
+	width: 100%;
+	height: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.bot_btn li {
+	margin: 10px;
+}
+
+.bot_btn li a {
+	color: rgb(182, 182, 182);
+	font-size: 18px;
+	font-weight: bold;
+}
+
+/*--------------------------별점 --------------------------------------*/
+.star_box {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	height: 50px;
+}
+
+.star {
+	position: relative;
+	font-size: 2rem;
+	color: #ddd;
+}
+
+.star input {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.star span {
+	width: 0;
+	position: absolute;
+	left: 0;
+	color: rgba(255, 255, 0, 0.856);
+	overflow: hidden;
+	pointer-events: none;
+}
+
+@media ( max-width :920px) {
+	#container {
+		font-family: 'Pretendard-Regular';
+		height: 3000px;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+	}
+	#prodetail_con {
+		height: 2700px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	#prodetail_topbox {
+		flex-direction: column;
+		justify-content: center;
+		height: 1400px;
+		width: 500px;
+	}
+	.protext_tagbox {
+		margin: 5px;
+	}
+	.prodetail_text {
+		margin-top: 40px;
+		width: 80%;
+	}
+	#myform {
+		width: 500px;
+	}
+	#prodetail_botbox {
+		width: 600px;
+		height: 1000px;
+	}
+}

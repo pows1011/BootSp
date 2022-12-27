@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link th:href="@{/css/header.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link th:href="@{/css/addproduct.css}" rel="stylesheet" />
+<link th:href="@{/css/reset2.css}" rel="stylesheet" />
+<link th:href="@{/css/reset.css}" rel="stylesheet" />
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function newimg(id) {
+		let html = "";
+		html += "<div class='img_subline'>";
+		html += "<label class='form_imgsub1'>"
+		html += "<input type='file' name='file' style='display: none;' id='preview"+id+"'>";
+		html += "<img src='/images/add_photo_alternate.svg' style='cursor: pointer' class='preview"+id+"'>";
+		html += "</label></div>";
+		$(".img_subbox").append(html);
+	}
+
+	$(function() {
+		$("input[name=file]").change(function() {
+			let a = $(this).val();
+			let b = a.split('\\');
+			let c = b[b.length - 1];
+			let hidden = $("input[name=subname]").length;
+			let hdr = new Array(hidden);
+
+			for (let i = 0; i < hidden; i++) {
+				hdr[i] = $("input[name=subname]").eq(i).val();
+				if (c == hdr[i]) {
+					alert('같은 파일명이 존재합니다 수정하세요');
+					$(this).val(null);
+					return;
+
+				}
+			}
+
+		});
+		$("button[name=delimg]").click(function() {
+			let con = confirm("삭제 하시겠습니까?");
+			if (con) {
+				let param = $(this).val();
+				console.log(param);
+				let paramtxt = param.split('/');
+				console.log(paramtxt);
+				let p_img = paramtxt[0];
+				let p_num = paramtxt[1];
+				let p_orig = paramtxt[2];
+				let id = paramtxt[3];
+
+				$.ajax({
+					url : "/delimg.do",
+					type : "GET",
+					data : {
+						p_img : p_img,
+						p_num : p_num,
+						p_orig : p_orig
+					},
+					success : function(result) {
+						if (result != 0) {
+
+							$("#" + id).remove();
+							newimg(id);
+						} else {
+							alert("삭제하려는 이미지가 존재하지 않습니다 새로고침 해주세요");
+						}
+
+					},
+				});
+			} else {
+				return false;
+
+			}
+		});
+
+		$("button[name=addbtn]").click(function() {
+			if ($("#topview").val() == "" || $('#topview').val() == null) {
+				alert("대표 이미지는 반드시 설정해야합니다.");
+				return false;
+			}
+		});
+		$('button[class=a]')
+
+				.click(
+						function() {
+							let hidden = $("input[name=subname]").length;
+							if (hidden == 0 || hidden == null) {
+								$(".sub").val("n");
+							}
+							if ($('#p_name').val() == ""
+									|| $('#p_name').val() == null) {
+								alert('이름이 공백입니다');
+								return false;
+							}
+							if ($('#p_category').val() == ""
+									|| $('#p_category').val() == null) {
+								alert('카테고리를 설정하세요');
+								return false;
+							}
+							if ($("#p_color").val() == ""
+									|| $('#p_color').val() == null) {
+								alert('색상을 작성하세요');
+								return false;
+							}
+							if ($("#p_size").val() == ""
+									|| $('#p_size').val() == null) {
+								alert('사이즈를 설정하세요');
+								return false;
+							}
+							if ($("#p_price").val() == ""
+									|| $('#p_price').val() == null) {
+								alert('가격을 설정하세요');
+								return false;
+							}
+							if ($("#p_content").val() == ""
+									|| $('#p_content').val() == null) {
+								alert('내용을 설정하세요');
+								return false;
+							}
+							if ($("#p_quantity").val() == ""
+									|| $('#p_quantity').val() == null) {
+								alert('수량을 작성하세요');
+								return false;
+							}
+
+						});
+	});
+
+	let addcolor = function(num) {
+		let html = "<input type='text' name='p_color' id='p_color' class='form_color' placeholder='색상 입력'>";
+		$('.co_box').append(html);
+	}
+	let addsize = function(num) {
+		let html = "<input type='text' name='p_size' id='p_size' class='form_size' placeholder='사이즈 입력'>";
+
+		$('.si_box').append(html);
+	}
+	$(function() {
+		$('#colorbtn').click(function() {
+			let cl = $('#col_chk').val();
+			if (cl >= 14) {
+				alert('색상은 13개 까지만 등록가능')
+			} else {
+				addcolor(cl);
+				parseInt(cl);
+				++cl;
+				$("#col_chk").attr("value", cl);
+			}
+
+		});
+	});
+
+	$(function() {
+		$('#sizebtn').click(function() {
+			let si = $('#size_chk').val();
+			if (si >= 11) {
+				alert('사이즈는 9개 까지만 등록가능')
+			} else {
+				addsize(si);
+				parseInt(si);
+				++si;
+				$("#size_chk").attr("value", si);
+			}
+
+		});
+
+		$('input[type=file]').change(function() {
+			let a = $(this).attr("id");
+			setImageFromFile(this, '.' + a);
+		});
+
+	});
+	function setImageFromFile(input, expression) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				$(expression).attr('src', e.target.result);
+			}
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+</script>
+</head>
+
+<body>
+
+	<div id="container">
+		<header th:replace="header :: header"> </header>
+
+
+		<main id="addpro_con">
+			<th:block th:if="${session.id!=null && session.type==2}">
+				<th:block th:if="${detype!=2}">
+					<div class="addpro_box">
+						<label class="addpro_title">
+							<h3>제품 등록</h3>
+						</label>
+						<form class="addpro_form" action="/addproduct" enctype="multipart/form-data" method="post">
+							<input type="hidden" id="col_chk" value="1">
+							<input type="hidden" id="size_chk" value="1">
+							<label class="form_tag">판매자</label>
+							<input type="text" name="p_id" id="p_id" class="form_set1" placeholder="판매자명" th:value="${session.id}" readonly>
+
+							<label class="form_tag">제품명</label>
+							<input type="text" name="p_name" id="p_name" class="form_set1" placeholder="제품명">
+
+							<label class="form_tag">제품 카테고리설정</label>
+							<select name="p_category" class="form_set1" id="p_category">
+								<option value="">선택</option>
+								<option value="아우터">아우터</option>
+								<option value="상의">상의</option>
+								<option value="하의">하의</option>
+								<option value="신발">신발</option>
+							</select>
+
+
+							<div class="col_sizebox">
+								<div class="col_si_lay">
+									<label class="form_tag1">
+										색상 종류 추가
+										<button id="colorbtn" type="button">+</button>
+									</label>
+									<label class="form_tag1">
+										사이즈 종류 추가
+										<button id="sizebtn" type="button">+</button>
+									</label>
+								</div>
+								<div class="color_lay">
+									<div class="co_box"></div>
+									<div class="si_box"></div>
+								</div>
+
+							</div>
+							<label class="form_tag" for="p_price">가격</label>
+							<input type="text" name="p_price" id="p_price" class="form_set1" placeholder="가격">
+
+							<label class="form_tag" for="p_content">제품 설명</label>
+							<textarea name="p_content" id="p_content" class="form_text" placeholder="설명란"></textarea>
+
+							<label class="form_tag" for="p_quantity">수량</label>
+							<input type="text" name="p_quantity" id="p_quantity" class="form_set1" placeholder="수량">
+
+
+							<label class="form_tag">대표이미지 추가(클릭)</label>
+
+							<label class="form_imgtop">
+								<input type="file" name="file" style="display: none;" id="topview">
+								<img src="/images/add_photo_alternate.svg" style="cursor: pointer" class="topview">
+							</label>
+
+							<label class="form_tag">서브이미지 추가(클릭)</label>
+							<div class="img_subbox">
+								<div class="img_subline">
+									<label class="form_imgsub1">
+										<input type="file" name="file" style="display: none;" id="preview1">
+										<img src="/images/add_photo_alternate.svg" style="cursor: pointer" class="preview1">
+									</label>
+								</div>
+								<div class="img_subline">
+									<label class="form_imgsub1">
+										<input type="file" name="file" style="display: none;" id="preview2">
+										<img src="/images/add_photo_alternate.svg" style="cursor: pointer" class="preview2">
+									</label>
+								</div>
+								<div class="img_subline">
+									<label class="form_imgsub1">
+										<input type="file" name="file" style="display: none;" id="preview3">
+										<img src="/images/add_photo_alternate.svg" style="cursor: pointer" class="preview3">
+									</label>
+								</div>
+								<div class="img_subline">
+									<label class="form_imgsub1">
+										<input type="file" name="file" style="display: none;" id="preview4">
+										<img src="/images/add_photo_alternate.svg" style="cursor: pointer" class="preview4">
+									</label>
+								</div>
+							</div>
+
+
+
+
+
+
+							<div class="add_btn_layout">
+								<button type="submit" name="addbtn" class="a">제품 등록</button>
+								<button type="reset">다시 작성</button>
+							</div>
+
+						</form>
+
+					</div>
+				</th:block>
+
+
+
+
+				<th:block th:if="${detype==2}">
+					<div class="addpro_box">
+						<label class="addpro_title">
+							<h3>제품 수정</h3>
+						</label>
+						<form class="addpro_form" action="/proupdate.do" enctype="multipart/form-data" method="post" name="f">
+
+							<label class="form_tag">제품 고유 번호</label>
+							<input type="text" name="p_num" id="p_num" class="form_set1" placeholder="고유번호" th:value="${p.p_num}" readonly>
+
+							<label class="form_tag">판매자</label>
+							<input type="text" name="p_id" id="p_id" class="form_set1" placeholder="판매자명" th:value="${p.p_id}" readonly>
+
+							<label class="form_tag">제품명</label>
+							<input type="text" name="p_name" id="p_name" class="form_set1" th:value="${p.p_name}" placeholder="제품명">
+
+							<label class="form_tag">제품 카테고리수정</label>
+							<select name="p_category" class="form_set1" id="p_category" th:value="${p.p_category}">
+								<option th:selected="${p.p_category}==''" value="">선택</option>
+								<option th:selected="${p.p_category}=='아우터'" value="아우터">아우터</option>
+								<option th:selected="${p.p_category}=='상의'" value="상의">상의</option>
+								<option th:selected="${p.p_category}=='하의'" value="하의">하의</option>
+								<option th:selected="${p.p_category}=='신발'" value="신발">신발</option>
+							</select>
+
+
+							<div class="col_sizebox">
+								<div class="col_si_lay">
+									<label class="form_tag1" id="colorbtn">
+										색상 종류 추가
+										<button id="colorbtn" type="button">+</button>
+									</label>
+									<label class="form_tag1" id="sizebtn">
+										사이즈 종류 추가
+										<button id="sizebtn" type="button">+</button>
+									</label>
+								</div>
+								<div class="color_lay">
+
+									<div class="co_box">
+										<input th:each="c:${color}" type="text" name="p_color" id="p_color" class="form_color" th:value="${c}">
+									</div>
+									<div class="si_box">
+										<input th:each="s:${size}" type="text" name="p_size" id="p_size" class="form_size" th:value="${s}">
+									</div>
+								</div>
+
+							</div>
+
+							<label class="form_tag">가격</label>
+							<input type="text" name="p_price" id="p_price" class="form_set1" placeholder="가격" th:value="${p.p_price}">
+
+							<label class="form_tag">제품 설명</label>
+							<textarea name="p_content" id="p_content" class="form_text" placeholder="설명란" th:text="${p.p_content}"></textarea>
+
+							<label class="form_tag">수량</label>
+							<input type="text" name="p_quantity" id="p_quantity" class="form_set1" placeholder="수량" th:value="${p.p_quantity}">
+
+							<label class="form_tag">대표이미지 수정(클릭)</label>
+
+							<label class="form_imgtop" th:each="img ,imgStat:${img}"th:if="${imgStat.index}==0">
+								<input type="file" name="topview" style="display: none;" id="topview" >
+								<img th:src="@{/stsimg/}+${img}" style="cursor: pointer" class="topview">
+								<input type="hidden" th:value="${origimg[0]}" name="topname">
+							</label>
+							<label class="form_tag">서브이미지 수정(클릭)</label>
+
+							<div class="img_subbox">
+								<div class="img_subline" th:each="img ,imgStat:${img}" th:id="${imgStat.index}" th:if="${imgStat.index}!=0">
+
+									<label class="form_imgsub1">
+										<input type="file" name="file" style="display: none;" th:id="'preview'+${imgStat.index}">
+										<img th:src="@{/stsimg/}+${img}" style="cursor: pointer" th:class="'preview'+${imgStat.index}">
+										<input type="hidden" th:value="${origimg[imgStat.index]}" name="subname">
+									</label>
+									<button type="button" th:value="${img}+'/'+${p.p_num}+'/'+${origimg[imgStat.index]}+'/'+${imgStat.index}" name="delimg" th:class="'delimg'+${imgStat.index}">삭제</button>
+
+								</div>
+
+								<div class="img_subline" th:each="num ,numStat: ${#numbers.sequence(#lists.size(img),5)}" th:if="${#lists.size(img)<=5}">
+									<label class="form_imgsub1">
+										<input type="file" name="file" style="display: none;" th:id="'preview'+${#lists.size(img)+numStat.index}">
+										<img src="/images/add_photo_alternate.svg" style="cursor: pointer" th:class="'preview'+${#lists.size(img)+numStat.index}">
+									</label>
+								</div>
+							</div>
+
+							<input type="hidden" class="sub" value="y" name="sub">
+
+
+
+							<div class="add_btn_layout">
+								<button type="submit" name="upbtn" class="a">제품 수정</button>
+								<button type="reset">다시 작성</button>
+							</div>
+						</form>
+
+					</div>
+
+				</th:block>
+
+
+
+			</th:block>
+
+
+
+
+
+
+
+
+
+			<th:block th:if="${session.id==null}">
+
+				<script type="text/javascript">
+					alert('로그인이 필요한 화면 입니다.');
+					location.href = '/login';
+				</script>
+
+			</th:block>
+
+			<th:block th:if="${session.type==1}">
+
+				<script type="text/javascript">
+					alert('이곳은 판매자만 등록이 가능한 곳입니다.');
+					location.href = '/prolist.do';
+				</script>
+
+			</th:block>
+
+
+
+
+
+		</main>
+
+
+
+
+
+		<footer th:replace="footer ::footer"></footer>
+
+	</div>
+
+</body>
+
+</html>

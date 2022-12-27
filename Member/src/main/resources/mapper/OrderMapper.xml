@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.member.mapper.OrderMapper">
+
+	<sql id="OrderColumn">
+		o_name
+		, o_num
+		, o_color
+		, o_size
+		, o_seller
+		, o_id
+		, o_img
+		, o_price
+
+	</sql>
+	<sql id="OrderDirect">
+		o_name
+		, o_num
+		, o_color
+		, o_size
+		, o_ostate
+		, o_dstate
+		, o_seller
+		, o_id
+		, o_img
+		, o_price
+
+	</sql>
+	<insert id="AddCart" parameterType="com.member.model.Order">
+		INSERT INTO ord (
+		<include refid="OrderColumn" />
+		) VALUES(
+		#{o_name}
+		, #{o_num}
+		, #{o_color}
+		, #{o_size}
+		, #{o_seller}
+		, #{o_id}
+		, #{o_img}
+		, #{o_price}
+		)
+	</insert>
+	
+	<insert id="Favorite" parameterType="com.member.model.Order">
+		INSERT INTO ord (
+		o_name , o_num ,o_ostate , o_dstate , o_id , o_img , o_price
+		) VALUES(
+		#{o_name}
+		, #{o_num}
+		, 2
+		, 0
+		, #{o_id}
+		, #{o_img}
+		, #{o_price}
+		)
+	</insert>
+	
+	
+	<insert id="AddDiOrder" parameterType="com.member.model.Order">
+		INSERT INTO ord (
+		<include refid="OrderDirect" />
+		) VALUES(
+		#{o_name}
+		, #{o_num}
+		, #{o_color}
+		, #{o_size}
+		, 1
+		, 1
+		, #{o_seller}
+		, #{o_id}
+		, #{o_img}
+		, #{o_price}
+		)
+	</insert>
+	<resultMap type="com.member.model.Order" id="OrderMap">
+		<id property="o_name" column="o_name" /> <!-- id에는 프라이머리키 -->
+		<result property="o_num" column="o_num" />
+		<result property="o_color" column="o_color" />
+		<result property="o_size" column="o_size" />
+		<result property="o_ostate" column="o_ostate" />
+		<result property="o_dstate" column="o_dstate" />
+		<result property="o_date" column="o_date" />
+		<result property="o_seller" column="o_seller" />
+		<result property="o_id" column="o_id" />
+		<result property="o_quantity" column="o_quantity" />
+		<result property="o_img" column="o_img" />
+		<result property="o_price" column="o_price" />
+	</resultMap>
+	<select id="FindCart" parameterType="String"
+		resultMap="OrderMap">
+		SELECT * FROM ord WHERE o_id=#{o_id} AND o_ostate=0
+	</select>
+	<select id="FindCartSeller" parameterType="String"
+		resultMap="OrderMap">
+		SELECT * FROM ord WHERE o_seller=#{o_seller} AND o_ostate=1
+	</select>
+	<update id="AddOrder" parameterType="com.member.model.Order">
+		UPDATE ord SET
+		o_quantity=#{o_quantity},o_ostate=1 ,
+		o_dstate=1,o_date=current_timestamp() WHERE o_num=#{o_num}
+	</update>
+	<select id="FindOrder" parameterType="hashMap"
+		resultMap="OrderMap">
+		<if test="type==1">
+			SELECT * FROM ord WHERE o_ostate=1 AND o_id=#{name} order
+			by o_date LIMIT
+			#{limitstart},#{recordsize}
+		</if>
+		<if test="type==2">
+			SELECT * FROM ord WHERE o_dstate=1 AND o_seller=#{name}
+			order by o_date
+			LIMIT
+			#{limitstart},#{recordsize}
+		</if>
+	</select>
+	<select id="FindOrder_count" parameterType="String"
+		resultType="int">
+		<if test="type==1">
+			SELECT count(*) FROM ord WHERE o_ostate=1 AND o_id=#{name}
+		</if>
+		<if test="type==2">
+			SELECT count(*) FROM ord WHERE o_dstate=1 AND
+			o_seller=#{name}
+		</if>
+	</select>
+
+	<select id="DelOrder" parameterType="hashMap">
+		DELETE FROM ord WHERE
+		o_id=#{o_id} AND o_num=#{o_num}
+	</select>
+</mapper>

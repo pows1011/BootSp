@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<header id="hed_con" th:fragment="header">
+		<div class="hed_tag">
+			<ul class="hed_tagul">
+
+
+				<li th:if="${session.id == null}" class="nametag"><a th:href="@{/login}">로그인</a></li>
+				<li th:if="${session.id != null}" class="nametag1"><span>[[${session.name}]]님 로그인</span>
+				<li th:if="${session.id != null}" class="nametag"><a th:href="@{/logout}">로그아웃</a></li>
+				<li th:if="${session.id != null}" class="nametag"><a th:href="@{/mypage(id=${session.id})}">MyPage</a></li>
+
+				<li th:if="${session.id != null}" class="nametag"><a th:href="@{/cartlist}">장바구니</a></li>
+				<li th:if="${session.id != null}" class="nametag"><a th:href="@{/findorder}">주문/배송</a></li>
+			</ul>
+		</div>
+		<div class="hed_box">
+			<div class="hed_box_boxshadow">
+				<div class="hed_logobox">
+					<a th:href="@{/index}"><span style="color: #4285F4;">L</span>o<span style="color: #4285F4;">G</span>o</a>
+				</div>
+				<div class="hed_menubox">
+					<ul class="hed_menuboxul">
+						<li><a href="/prolist.do">전체상품</a></li>
+						<li><a href="/category?p_category=상의">상의</a></li>
+						<li><a href="/category?p_category=하의">하의</a></li>
+						<li><a href="/category?p_category=아우터">아우터</a></li>
+						<li><a href="/category?p_category=신발">신발</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+</body>
+</html>

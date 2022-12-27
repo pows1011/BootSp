@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/header.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link th:href="@{/css/mypage.css}" rel="stylesheet" />
+<link th:href="@{/css/reset2.css}" rel="stylesheet" />
+<link th:href="@{/css/reset.css}" rel="stylesheet" />
+<title>마이 페이지</title>
+<script type="text/javascript">
+	function DelChk(pass, type) {
+		const flag = confirm("회원 탈퇴를 진행 하시겠습니까?");		
+		if (flag) {
+			const pwd = prompt("삭제하려는 아이디의 비밀번호 입력", "");
+			if (pwd == pass) {
+				if (type == f) {					
+					document.f.submit();
+				} else {
+					document.u.action = "/mydel";
+					document.u.submit();
+				}
+			} else {
+				alert('비밀번호가 일치하지 않습니다')
+				return false;
+			}
+		} else {
+			alert("회원탈퇴 취소");
+		}
+	}
+</script>
+</head>
+
+<body>
+
+	<div id="container">
+		<header th:replace="header :: header"> </header>
+
+
+		<main id="mypage_con">
+			<form name="f" method="post" action="/mydel">
+				<th:block th:if="${myChk==null}">
+					<div class="mypage_box">
+						<h3>회원 정보 확인</h3>
+						<div class="page_content">
+							<p>ID</p>
+							<span class="pagein" th:text="${Member.id}"></span>
+						</div>
+						<div class="page_content">
+							<p>이름</p>
+							<span class="pagein" th:text="${Member.name}"></span>
+						</div>
+						<div class="page_content">
+							<p>주소</p>
+							<span class="pagein" th:text="${Member.addr}"></span>
+						</div>
+						<div class="page_content">
+							<p>전화번호</p>
+							<span class="pagein" th:text="${Member.tel}"></span>
+						</div>
+						<div class="page_content">
+							<p>생일</p>
+							<span class="pagein" th:text="${Member.birth}"></span>
+						</div>
+						<div class="page_content" th:if="${Member.type==1}">
+							<p>회원 타입</p>
+							<span class="pagein" th:text="구매자"></span>
+						</div>
+						<div class="page_content" th:if="${Member.type==2}">
+							<p>회원 타입</p>
+							<span class="pagein" th:text="판매자"></span>
+						</div>
+						<div class="mypage_btn">
+							<button type="button"
+								th:onclick="|location.href='@{/myup(myChk=u)}'|">정보
+								수정하기</button>
+							<button type="button" th:onclick="DelChk([[${Member.pwd}]],f)">회원
+								탈퇴하기</button>
+						</div>
+					</div>
+				</th:block>
+			</form>
+
+
+
+			<form action="/myup" method="post" name="u">
+				<div class="mypage_box" th:if="${myChk=='u'}">
+
+					<h3>회원 정보 수정</h3>
+					<div class="page_content">
+						<p>ID</p>
+						<input type="text" name="id" id="id" class="pageinp"
+							th:value="${Member.id}" readonly>
+					</div>
+					<div class="page_content">
+						<p>패스워드</p>
+						<input type="password" name="pwd" id="pwd" class="pageinp"
+							th:value="${Member.pwd}">
+					</div>
+					<div class="page_content">
+						<p>이름</p>
+						<input type="text" name="name" id="name" class="pageinp"
+							th:value="${Member.name}">
+					</div>
+					<div class="page_content">
+						<p>주소</p>
+						<input type="text" name="addr" id="addr" class="pageinp"
+							th:value="${Member.addr}">
+					</div>
+					<div class="page_content">
+						<p>전화번호</p>
+						<input type="tel" name="tel" id="tel" class="pageinp"
+							th:value="${Member.tel}">
+					</div>
+					<div class="page_content">
+						<p>생일</p>
+						<input type="date" name="birth" id="birth" class="pageinp"
+							th:value="${Member.birth}">
+					</div>
+					<div class="mypage_btn">
+						<button type="submit">정보 수정완료</button>
+						<button type="button" th:onclick="DelChk([[${Member.pwd}]],u)">회원
+							탈퇴하기</button>
+					</div>
+
+				</div>
+			</form>
+		</main>
+
+
+		<footer th:replace="footer ::footer"></footer>
+
+	</div>
+
+</body>
+
+</html>
