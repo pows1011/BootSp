@@ -58,6 +58,10 @@
 	width: 100%;
 	height: 90%;
 }
+#idchk{
+	width:50px;
+	height:50px;
+}
 
 .form_tag {
 	display: flex;

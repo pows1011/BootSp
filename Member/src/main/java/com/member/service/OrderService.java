@@ -43,6 +43,23 @@ public class OrderService {
 		return oMapper.Favorite(o);
 	}
 
+	@Transactional
+	public void FavoriteOff(int o_num) {
+		oMapper.FavoriteOff(o_num);
+	}
+	@Transactional
+	public void FavoriteOn(int o_num) {
+		oMapper.FavoriteOn(o_num);
+	}
+	
+	public Order FindFavorite(Order o) {
+		return oMapper.FindFavorite(o);
+	}
+	
+	public Order FavoriteOnChk(Order o) {
+		return oMapper.FavoriteOnChk(o);
+	}
+
 	public ArrayList<Order> FindCart(String o_id) {
 		return oMapper.FindCart(o_id);
 	}

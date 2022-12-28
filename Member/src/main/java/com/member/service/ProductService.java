@@ -125,20 +125,16 @@ public class ProductService {
 
 	}
 
-	public PagingResponse<Product> Search(SearchDto params, String keyword, String search) {
-
+	public PagingResponse<Product> Search(SearchDto params, String keyword, String search) {		
 		int count;
 		if (keyword.equals("p_name") || keyword.equals("p_content")) {
 			count = pMapper.SearchCount(keyword, search);
-
 		} else {
 			count = pMapper.SearchTotCount(search);
 		}		
-
 		if (count < 1) {
 			return new PagingResponse<>(Collections.emptyList(), null);
 		}
-
 		Pagination pagination = new Pagination(count, params);
 		params.setPagination(pagination);
 		Map<String, Object> map = new HashMap<>();
@@ -146,7 +142,6 @@ public class ProductService {
 		map.put("keyword", keyword);
 		map.put("limitstart", params.getPagination().getLimitStart());
 		map.put("recordsize", params.getRecordSize());
-
 		List<Product> list = null;
 		if (keyword.equals("p_name") || keyword.equals("p_content")) {
 			list = pMapper.Search(map);

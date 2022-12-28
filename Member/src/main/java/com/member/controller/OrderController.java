@@ -124,18 +124,30 @@ public class OrderController {
 
 	@ResponseBody
 	@GetMapping("/favorite")
-	public boolean Favorite(int o_num, HttpSession session) {
+	public boolean Favorite(int o_num, HttpSession session, int type) {
 		boolean chk = false;
-		String id = (String) session.getAttribute("id");
-		Product p = pService.getProduct(o_num);
-		Order o = new Order();
-		String[] img = p.getP_img().split("/");
-		o.setO_id(id);
-		o.setO_price(p.getP_price());
-		o.setO_name(p.getP_name());
-		o.setO_num(o_num);
-		o.setO_img(img[0]);
-		chk = oService.Favorite(o);
+
+		if (type == 1) {
+			String id = (String) session.getAttribute("id");
+			Product p = pService.getProduct(o_num);
+			Order o = new Order();
+			String[] img = p.getP_img().split("/");
+			o.setO_id(id);
+			o.setO_price(p.getP_price());
+			o.setO_name(p.getP_name());
+			o.setO_num(o_num);
+			o.setO_img(img[0]);
+			Order Favchk = oService.FavoriteOnChk(o);
+			if (Favchk == null) {
+				chk = oService.Favorite(o);
+			} else if (Favchk.getO_ostate() == 0) {
+				oService.FavoriteOn(o_num);
+				chk = true;
+			}
+		} else {
+			oService.FavoriteOff(o_num);
+		}
+
 		return chk;
 	}
 

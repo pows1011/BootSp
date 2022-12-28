@@ -76,9 +76,9 @@
 
 	<select id="SearchTotal" parameterType="hashMap"
 		resultMap="ProductMap">
-		SELECT * FROM product WHERE p_content LIKE
-		CONCAT('%',#{total},'%') OR p_name LIKE CONCAT('%',#{total},'%') LIMIT
-		#{limitstart},#{recordsize}
+		SELECT * FROM product WHERE p_content like
+		CONCAT('%',#{search},'%') OR p_name like
+		CONCAT('%',#{search},'%') LIMIT #{limitstart},#{recordsize}
 	</select>
 	<select id="Productstar" resultMap="ProductMap">
 		SELECT
@@ -201,10 +201,9 @@
 		SELECT COUNT(*) FROM product WHERE ${keyword} like
 		CONCAT('%',#{search},'%')
 	</select>
-	<select id="SearchTotCount" parameterType="String"
-		resultType="int">
+	<select id="SearchTotCount" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM product WHERE p_content LIKE
-		CONCAT('%','#{total}','%')
+		CONCAT('%',#{total},'%')
 		OR p_name LIKE CONCAT('%',#{total},'%')
 	</select>
 

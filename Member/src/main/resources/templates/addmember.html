@@ -1,72 +1,185 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<link th:href="@{/css/header.css}" rel="stylesheet" />
-	<link th:href="@{/css/footer.css}" rel="stylesheet" />
-	<link th:href="@{/css/addmember.css}" rel="stylesheet" />
-	<link th:href="@{/css/reset2.css}" rel="stylesheet" />
-	<link th:href="@{/css/reset.css}" rel="stylesheet" />
-	
-	<title>Insert title here</title>
+<meta charset="UTF-8">
+<link th:href="@{/css/header.css}" rel="stylesheet" />
+<link th:href="@{/css/footer.css}" rel="stylesheet" />
+<link th:href="@{/css/addmember.css}" rel="stylesheet" />
+<link th:href="@{/css/reset2.css}" rel="stylesheet" />
+<link th:href="@{/css/reset.css}" rel="stylesheet" />
+
+<title>Insert title here</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$("#pwd").focus(function() {
+			$(".pwdchk").text("");				
+		});
+		$("#id").focus(function() {
+			$(".chkent").text("");				
+		});
+		$("#pwd").blur(function() {
+			const pwd = $("#pwd").val();
+			if (pwd == "" || pwd == null) {
+				$(".pwdchk").text("비밀번호가 공백입니다");
+				$("#pwd").val("");
+				return false;
+			}else if (pwd.length < 8) {
+				$(".pwdchk").text("비밀번호는 8글자 이상 20글자 이하");
+				$("#pwd").val("");
+				return false;
+			}else if (pwd.length > 21) {
+				$(".pwdchk").text("비밀번호는 8글자 이상 20글자 이하");
+				$("#pwd").val("");
+				return false;
+			}else{
+				$(".pwdchk").text("적합한 비밀번호입니다");
+				$(".pwdchk").css("color","blue");
+			}
+		});
+		
+			
+		$("#id").blur(function() {
+			const id = $("#id").val();
+			if (id == "" || id == null) {
+				$(".chkent").text("아이디값이 공백입니다");
+				$("#id").val("");
+				return false;
+			}else if (id.length < 8) {
+				$(".chkent").text("아이디는 8글자 이상 16글자 이하");
+				$("#id").val("");
+				return false;
+			}else if (id.length > 17) {
+				$(".chkent").text("아이디는 8글자 이상 16글자 이하");
+				$("#id").val("");
+				return false;
+			}else{
+				$(".chkent").text("");
+			}		
+			$.ajax({
+				url : "/idchk",
+				type : "GET",
+				data : {
+					id : id
+				},
+				success : function(result) {
+					if (result == 'no') {
+						$(".chkent").text("*사용 불가능한 아이디");
+						$(".chkent").css("color", "red");
+						$("#chkval").val("false");
+					} else {
+						$(".chkent").text("*사용 가능한 아이디");
+						$(".chkent").css("color", "blue");
+						$("#chkval").val("true");
+					}
+				}
+			});
+
+		});
+
+		$("#addmem_btn").click(function() {
+			const chk = $("#chkval").val();
+			if ($('#id').val() == "" || $('#id').val() == null) {
+				alert("아이디가 공백입니다");
+				return false;
+			}
+			if ($('#pwd').val() == "" || $('#pwd').val() == null) {
+				alert("비밀번호가 공백입니다");
+				return false;
+			}
+			if ($('#name').val() == "" || $('#name').val() == null) {
+				alert("이름이 공백입니다");
+				return false;
+			}
+			if ($('#addr').val() == "" || $('#addr').val() == null) {
+				alert("주소가 없습니다");
+				return false;
+			}
+			if ($('#tel').val() == "" || $('#tel').val() == null) {
+				alert("전화번호를 입력하세요");
+				return false;
+			}
+			if ($('#birth').val() == "" || $('#birth').val() == null) {
+				alert("생일을 입력하세요");
+				return false;
+			}
+			if ($('#gender').val() == "" || $('#gender').val() == null) {
+				alert("성별을 체크하세요");
+				return false;
+			}
+
+			if (chk == 'false') {
+				alert("ID중복 체크가 맞지 않습니다.");
+				return false;
+			} else {
+				memForm.submit();
+			}
+
+		});
+
+	});
+</script>
 </head>
 <body>
 
 	<div id="container">
-		<header th:replace="header :: header">
-		</header>
+		<header th:replace="header :: header"> </header>
 
 
-		 <main id="addmem_con">
-            <div class="addmem_box">
-                <h3>회원 가입</h3>
+		<main id="addmem_con">
+			<div class="addmem_box">
+				<h3>회원 가입</h3>
 
-                <form class="addmem_form" method="post" action="/member/add">
+				<form class="addmem_form" method="post" action="/member/add" name="memForm">
+					<input type="hidden" value="false" id="chkval">
+					<label class="form_tag">아이디</label>
+					<input type="text" id="id" name="id" class="form_set1">
+					<p class="chkent"></p>
+					<label class="form_tag">비밀번호</label>
+					<input type="password" id="pwd" name="pwd" class="form_set1">
+					<p class="pwdchk"></p>
+					<label class="form_tag">이름</label>
+					<input type="text" id="name" name="name" class="form_set1">
 
-                    <label class="form_tag">아이디</label>
-                    <input type="text" id="id" name="id" class="form_set1">
+					<label class="form_tag">주소</label>
+					<input type="text" id="addr" name="addr" class="form_set1">
 
-                    <label class="form_tag">비밀번호</label>
-                    <input type="password" id="pwd" name="pwd" class="form_set1">
+					<label class="form_tag">전화번호</label>
+					<input type="tel" id="tel" name="tel" class="form_set1">
 
-                    <label class="form_tag">이름</label>
-                    <input type="text" id="name" name="name" class="form_set1">
-
-                    <label class="form_tag">주소</label>
-                    <input type="text" id="addr" name="addr" class="form_set1">
-
-                    <label class="form_tag">전화번호</label>
-                    <input type="tel"  id="tel" name="tel" class="form_set1">
-
-                    <label class="form_tag">생일</label>
-                    <input type="date" id="birth" name="birth" class="form_set1">
-
-
-                    <div class="radio_set">
-                        성별:
-                        <input type="radio" id="gender" name="gender" value="남자">남자
-                        <input type="radio" id="gender" name="gender" value="여자">여자
-                    </div>
+					<label class="form_tag">생일</label>
+					<input type="date" id="birth" name="birth" class="form_set1">
 
 
-                    <label class="form_tag">가입 목적</label>
-                    <select name="type" class="form_set1" id="type">
-                        <option value="1">구매</option>
-                        <option value="2">판매</option>
-                    </select>
-                    <div class="add_btn_layout">
-                        <button type="submit">회원 가입</button>
-                        <button type="reset">다시 작성</button>
-                    </div>
-                </form>
-
-            </div>
+					<div class="radio_set">
+						성별:
+						<input type="radio" id="gender" name="gender" value="남자">
+						남자
+						<input type="radio" id="gender" name="gender" value="여자">
+						여자
+					</div>
 
 
-        </main>
+					<label class="form_tag">가입 목적</label>
+					<select name="type" class="form_set1" id="type">
+						<option value="1">구매</option>
+						<option value="2">판매</option>
+					</select>
+					<div class="add_btn_layout">
+						<button type="button" id="addmem_btn">회원 가입</button>
+						<button type="reset">다시 작성</button>
+					</div>
+				</form>
+
+			</div>
 
 
-			<footer th:replace="footer.html::footer"></footer>
+		</main>
+
+
+		<footer th:replace="footer.html::footer"></footer>
 
 	</div>
 

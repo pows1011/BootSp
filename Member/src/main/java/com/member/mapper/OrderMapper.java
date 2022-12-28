@@ -16,7 +16,11 @@ public interface OrderMapper {
 	public boolean AddDiOrder(Order o);
 	
 	public boolean Favorite(Order o);
-
+	
+	public void FavoriteOff(int o_num);
+	public void FavoriteOn(int o_num);
+	public Order FindFavorite(Order o);
+	public Order FavoriteOnChk(Order o);
 	public ArrayList<Order> FindCart(String o_id);
 
 	public ArrayList<Order> FindCartSeller(String o_name);

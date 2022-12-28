@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.member.model.Order;
 import com.member.model.PagingResponse;
 import com.member.model.Product;
 import com.member.model.Review;
 import com.member.model.SearchDto;
+import com.member.service.OrderService;
 import com.member.service.ProductService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,6 +43,9 @@ public class ProductController {
 
 	@Autowired
 	private final ProductService pService;
+
+	@Autowired
+	private final OrderService oService;
 
 	/*------------------------------------공통 처리 메서드-------------------------------------------------*/
 	public void delimg(Product p) {
@@ -121,6 +126,8 @@ public class ProductController {
 	}
 
 	/*------------------------------------공통 처리 메서드-------------------------------------------------*/
+
+	
 	@PostMapping("/addproduct")
 	public String addProduct(@RequestParam MultipartFile[] file, Product p, HttpServletRequest request)
 			throws Exception {
@@ -145,14 +152,22 @@ public class ProductController {
 	}
 
 	@GetMapping("/prodetail.do")
-	public String getProduct(int p_num, Model model, String detype) {
-		Product p = pService.getProduct(p_num);
+	public String getProduct(int p_num, Model model, String detype, HttpSession session) {
+		Product p = pService.getProduct(p_num);			
+		String id = (String) session.getAttribute("id");
+		Order o = new Order();
+		o.setO_id(id);
+		o.setO_num(p_num);
+		Order favorite = oService.FindFavorite(o);
 		String[] color = p.getP_color().split("/");
 		String[] size = p.getP_size().split("/");
 		String[] img = p.getP_img().split("/");
-		p.setP_reviewstar(Math.round(p.getP_reviewstar() * 100) / 100.0);
+		p.setP_reviewstar(Math.round(p.getP_reviewstar() * 100) / 100.0);  //소수점 2자리까지
 		model.addAttribute("img", img);
-		model.addAttribute("p", p);
+		model.addAttribute("p", p);		
+		if (favorite != null) {
+			model.addAttribute("favorite", favorite.getO_ostate());
+		}
 		model.addAttribute("color", color);
 		model.addAttribute("size", size);
 		if (detype != null && detype != "") {

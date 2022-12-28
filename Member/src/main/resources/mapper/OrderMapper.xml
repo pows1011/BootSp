@@ -24,7 +24,6 @@
 		, o_id
 		, o_img
 		, o_price
-
 	</sql>
 	<insert id="AddCart" parameterType="com.member.model.Order">
 		INSERT INTO ord (
@@ -51,10 +50,15 @@
 		, 0
 		, #{o_id}
 		, #{o_img}
-		, #{o_price}
+		, #{o_price}		
 		)
 	</insert>
-	
+	<update id="FavoriteOff" parameterType="int">
+		UPDATE ord SET o_ostate=0 WHERE o_num=#{o_num}
+	</update>
+	<update id="FavoriteOn" parameterType="int">
+		UPDATE ord SET o_ostate=2 WHERE o_num=#{o_num}
+	</update>
 	
 	<insert id="AddDiOrder" parameterType="com.member.model.Order">
 		INSERT INTO ord (
@@ -86,6 +90,12 @@
 		<result property="o_img" column="o_img" />
 		<result property="o_price" column="o_price" />
 	</resultMap>
+	<select id="FindFavorite" parameterType="com.member.model.Order" resultMap="OrderMap">
+		SELECT * FROM ord WHERE o_num=#{o_num} AND o_ostate=2 AND o_id=#{o_id}
+	</select>
+	<select id="FavoriteOnChk" parameterType="com.member.model.Order" resultMap="OrderMap">
+		SELECT * FROM ord WHERE o_num=#{o_num} AND o_favorite='on' AND o_id=#{o_id}
+	</select>
 	<select id="FindCart" parameterType="String"
 		resultMap="OrderMap">
 		SELECT * FROM ord WHERE o_id=#{o_id} AND o_ostate=0

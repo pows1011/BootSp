@@ -258,6 +258,13 @@
 		
 		$("#favorite_btn").click(function() {			
 			const page=/*[[${session.id}]]*/"";
+			const typetxt=$(".favorite").attr("id");
+			let type;
+			if(typetxt=='favon'){
+				type=2;
+			}else{
+				type=1;
+			}
 			if(page==null||page==""){
 				alert('로그인이 필요합니다');
 				return false;
@@ -266,11 +273,16 @@
 					type : "GET",
 					url : "/favorite",
 					data : {
-						o_num : r_pronum,				
+						o_num : r_pronum,
+						type :type
 					},				
 					success : function(result) {
 						if(result==true){
-								$(".favorite").css("color","red");				
+								$(".favorite").css("color","red");
+								$(".favorite").attr("id","favon");		
+						}else{
+							$(".favorite").css("color","black");
+							$(".favorite").attr("id","favoff");				
 						}
 											
 					},
@@ -432,8 +444,9 @@
 							<img src="/images/buy.svg">구매
 						</button>
 						<button id="favorite_btn" type="button">
-						<span class="material-symbols-outlined favorite"> favorite<label>찜하기</label>
-						</span>
+							<span class="material-symbols-outlined favorite" th:if="${favorite==null}" id="favoff"> favorite<label>찜하기</label></span>
+							<span class="material-symbols-outlined favorite" th:if="${favorite==2}" id="favon" style="color: red"> favorite<label>찜하기</label>
+							</span>
 						</button>
 					</div>
 
