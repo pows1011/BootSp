@@ -8,6 +8,7 @@
 		, name
 		, addr
 		, tel
+		, email
 		, birth
 		, gender
 		, type
@@ -25,14 +26,21 @@
 		, #{name}
 		, #{addr}
 		, #{tel}
+		, #{email}
 		, #{birth}
 		, #{gender}
 		, #{type}
 		)
 	</insert>
-
-
-
+	<select id="AllMember" resultType="com.member.model.Member">
+		SELECT * FROM Member	
+	</select>
+	<update id="EmailNum" parameterType="String">
+		UPDATE Member SET wish=#{wish} WHERE email=#{email}
+	</update>
+	<select id="EmailCode" parameterType="String" resultType="String">
+		SELECT id FROM member WHERE email=#{email} AND wish=#{wish}
+	</select>
 	<select id="getMember" parameterType="String"
 		resultType="com.member.model.Member">
 		SELECT
@@ -57,5 +65,9 @@
 	<delete id="delMember" parameterType="String">
 		DELETE FROM member WHERE id=#{id} 
 	</delete>
-
+	
+	
+	
+	
+	
 </mapper>

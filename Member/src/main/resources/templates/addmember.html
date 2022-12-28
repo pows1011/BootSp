@@ -101,6 +101,10 @@
 				alert("전화번호를 입력하세요");
 				return false;
 			}
+			if ($('#email').val() == "" || $('#email').val() == null) {
+				alert("전화번호를 입력하세요");
+				return false;
+			}
 			if ($('#birth').val() == "" || $('#birth').val() == null) {
 				alert("생일을 입력하세요");
 				return false;
@@ -148,7 +152,9 @@
 
 					<label class="form_tag">전화번호</label>
 					<input type="tel" id="tel" name="tel" class="form_set1">
-
+					
+					<label class="form_tag">이메일</label>
+					<input type="email" id="email" name="email" class="form_set1">
 					<label class="form_tag">생일</label>
 					<input type="date" id="birth" name="birth" class="form_set1">
 

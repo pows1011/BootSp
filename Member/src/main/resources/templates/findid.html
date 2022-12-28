@@ -8,6 +8,42 @@
 <link th:href="@{/css/reset2.css}" rel="stylesheet" />
 <link th:href="@{/css/reset.css}" rel="stylesheet" />
 <title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#fidBtn")
+				.click(
+						function() {
+							const reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+							const email = $("#email").val();
+							if (email == null || email == '') {
+								alert("인증받을 이메일을 입력하세요")
+								return false;
+							}
+							if (!reg_email.test(email)) {
+								alert('이메일 형식이 올바르지 않습니다');
+								return false;
+							}
+							$.ajax({
+								url : "/email",
+								type : "GET",
+								data : {
+									email : email
+								},
+								success : function(result) {
+									if (result == null || result == "") {
+										alert("존재하지 않는 이메일 값");
+										return false;
+									} else {
+										fidForm.submit();
+
+									}
+								}
+							});
+
+						});
+	});
+</script>
 </head>
 <body>
 
@@ -19,12 +55,26 @@
 			<div class="login_box">
 				<h3>아이디 찾기</h3>
 
-				<form class="login_text" method="post" action="/login">
-					<input type="email" name="email" id="email" placeholder="이메일 입력"> 
+				<form class="login_text" method="post" action="/findid" name="fidForm" th:if="${email}==null and ${findid}==null">
+					<input type="email" name="email" id="email" placeholder="이메일 입력">
 
-					<button type="button">이메일 전송</button>
-					
-				</form>			
+					<button type="button" id="fidBtn">이메일 전송</button>
+
+				</form>
+				<form class="login_text" method="post" action="/EmailChk" name="fidForm" th:if="${email!=null}">
+
+					<input type="hidden" name="email" id="email" th:value="${email}">
+					<input type="text" name="chknum" id="chknum" placeholder="인증번호 입력">
+
+					<button type="submit">인증번호전송</button>
+
+				</form>
+				<th:block th:if="${findid!=null}">
+					<form class="login_text">
+						<input type="text" name="text" id="text" placeholder="이메일 입력" readonly th:value="${findid}">
+
+					</form>
+				</th:block>
 			</div>
 
 

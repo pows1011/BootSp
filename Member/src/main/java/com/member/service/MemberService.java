@@ -1,5 +1,8 @@
 package com.member.service;
 
+import java.util.ArrayList;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +39,21 @@ public class MemberService {
 	public void delMember(final String id) {
 		mMapper.delMember(id);
 	}
+	@Transactional
+	public void EmailNum(String wish,String email) {
+		mMapper.EmailNum(wish, email);
+	}
 	
+	public String EmailCode(String wish,String email) {
+		return mMapper.EmailCode(wish, email);
+	}
+	
+	
+	
+	public ArrayList<Member> AllMember(){
+		
+		return mMapper.AllMember();
+	}
 
   
  

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -151,7 +152,7 @@ public class ProductController {
 		return "redirect:/prolist.do";
 	}
 
-	@GetMapping("/prodetail.do")
+	@GetMapping("/prodetail.do")	
 	public String getProduct(int p_num, Model model, String detype, HttpSession session) {
 		Product p = pService.getProduct(p_num);			
 		String id = (String) session.getAttribute("id");
@@ -173,7 +174,6 @@ public class ProductController {
 		if (detype != null && detype != "") {
 			model.addAttribute("detype", "up");
 		}
-
 		return "productdetail";
 	}
 
@@ -398,8 +398,8 @@ public class ProductController {
 	@GetMapping("/listselect")
 	public String List_Sel(@ModelAttribute("params") SearchDto params, Model model,
 			@RequestParam("selector") String selector, @RequestParam("selectorOrder") String selectorOrder) {
-		System.out.println(selector);
-		System.out.println(selectorOrder);
+		
+		
 		PagingResponse<Product> prolist = pService.List_Sel(params, selector, selectorOrder);
 		model.addAttribute("prolist", imgsplit(prolist));
 		return "productlist";

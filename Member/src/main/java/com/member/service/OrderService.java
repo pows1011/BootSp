@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,6 @@ import com.member.mapper.OrderMapper;
 import com.member.model.Order;
 import com.member.model.Pagination;
 import com.member.model.PagingResponse;
-import com.member.model.Product;
 import com.member.model.SearchDto;
 
 import lombok.RequiredArgsConstructor;
