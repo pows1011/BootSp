@@ -26,8 +26,8 @@ public class TemplController {
 		ArrayList<Product> starlist=pService.Productstar();
 		ArrayList<Product> datelist=pService.Productdate();
 		for(int i=0;i<starlist.size();i++) {
-			String[] starimg = starlist.get(i).getP_img().split("/");
-			String[] dateimg = datelist.get(i).getP_img().split("/");
+			String[] starimg = starlist.get(i).getP_img().split("/");//인기순
+			String[] dateimg = datelist.get(i).getP_img().split("/");//신상품순
 			starlist.get(i).setP_img(starimg[0]);
 			datelist.get(i).setP_img(dateimg[0]);
 		}	
@@ -64,9 +64,9 @@ public class TemplController {
 	}
 	
 	
-	@PostMapping("/uppage")
-	public String adduppage(@RequestParam("p_num")int p_num,Model model) {				
-		Product p=pService.getProduct(p_num);
+	@PostMapping("/uppage") //상세 페이지의 수정하기 버튼을 누를경우 이동,  
+	public String adduppage(@RequestParam("p_num")int p_num,Model model) {
+		Product p=pService.getProduct(p_num); 
 		String[] color = p.getP_color().split("/");
 		String[] size = p.getP_size().split("/");
 		String[] img =p.getP_img().split("/");
@@ -76,7 +76,7 @@ public class TemplController {
 		model.addAttribute("p",p);		
 		model.addAttribute("color",color);
 		model.addAttribute("size",size);
-		model.addAttribute("detype",2);
+		model.addAttribute("detype",2); //addproduct.html을 update페이지가 공유하기 때문에 update목적의 페이지를 보여주기 위해 구분
 		
 		return "addproduct";
 	}

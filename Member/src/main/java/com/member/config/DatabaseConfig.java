@@ -1,4 +1,4 @@
-package com.member.mapper;
+package com.member.config;
 
 import javax.sql.DataSource;
 

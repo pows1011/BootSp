@@ -259,11 +259,11 @@
 		$("#favorite_btn").click(function() {			
 			const page=/*[[${session.id}]]*/"";
 			const typetxt=$(".favorite").attr("id");
-			let type;
+			let favtype;
 			if(typetxt=='favon'){
-				type=2;
+				favtype=2;
 			}else{
-				type=1;
+				favtype=1;
 			}
 			if(page==null||page==""){
 				alert('로그인이 필요합니다');
@@ -274,7 +274,7 @@
 					url : "/favorite",
 					data : {
 						o_num : r_pronum,
-						type :type
+						favtype :favtype
 					},				
 					success : function(result) {
 						if(result==true){
