@@ -1,0 +1,87 @@
+CREATE TABLE member (
+	id VARCHAR(30) NOT NULL primary KEY,
+    pwd VARCHAR(30) NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    addr VARCHAR(30) NOT NULL,
+    tel VARCHAR(30) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    birth DATE NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    type int(5)NOT NULL,
+    find varchar(40)
+);
+DROP TABLE member;
+SELECT * FROM member;
+CREATE TABLE product(
+	p_num int(20) auto_increment primary KEY,
+	p_id VARCHAR(50) references member(id) on delete cascade,
+    p_name VARCHAR(60) NOT NULL,    
+    p_img VARCHAR(3000) NOT NULL,    
+    p_originimg VARCHAR(500) NOT NULL,
+    p_price INT(100) NOT NULL,
+    p_content VARCHAR(2000),
+    p_quantity INT(100) NOT NULL,
+    p_color VARCHAR(100)NOT NULL,
+    p_size varchar(100)NOT NULL,
+    p_date datetime NOT NULL default current_timestamp(),
+    p_ndate datetime null,
+    p_category varchar(10) NOT NULL,
+    p_reviewstar double default 0,
+    p_reviewcnt int(100) default 0
+);
+commit;
+SELECT * FROM product  ORDER BY p_name desc LIMIT 0,5;
+DROP TABLE product;
+SELECT * FROm review;
+SELECT * FROM product;
+CREATE TABLE review(
+	r_num int(30) auto_increment PRIMARY KEY,
+    r_writer VARCHAR(50) references member(id) on delete  cascade,
+    r_content VARCHAR(500) NOT NULL,
+    r_imgpath VARCHAR(3000),
+    r_date datetime NOT NULL default current_timestamp(),
+    r_pronum int(30) references product(num) on delete  cascade,
+    r_star double NOT NULL
+);
+SELECT * FROM product WHERE p_content LIKE CONCAT('%1%') OR p_name LIKE CONCAT('%1%') LIMIT 0,5;
+SELECT * FROM product WHERE p_name LIKE CONCAT("%a%") LIMIT 0,5;
+SELECT COUNT(*) FROM product WHERE p_name LIKE CONCAT("%ㅇ%");
+SELECT * FROM product;
+SELECT * FROM member;
+ALTER TABLE review MODIFY r_star double;
+commit;
+SELECT
+		*
+		FROM product
+		ORDER BY
+		p_date DESC LIMIT 0,5;
+create table ord(
+    o_name varchar(50) NOT NULL references product(p_name) on delete cascade,
+    o_num int(5) NOT NULL references product(p_num) on delete cascade,
+    o_color VARCHAR(50),
+    o_size VARCHAR(50) ,
+    o_ostate int(5) default 0,
+    o_dstate int(5) default 0,
+    o_date datetime NOT NULL default current_timestamp(),
+    o_seller VARCHAR(40) references product(p_id) on delete cascade,
+    o_id VARCHAR(30) NOT NULL references member(id) on delete cascade,
+    o_quantity int(100) default 0,
+    o_img VARCHAR(100) NOT NULL,
+    o_price int(100),
+    o_favorite VARCHAR(5) NOT NULL default 'on'
+);
+set sql_safe_updates=0;
+SELECT * FROM ord;
+commit;
+SELECT
+		*
+		FROM product
+		ORDER BY
+		p_reviewstar DESC LIMIT 0,5;
+SELECT COUNT(*) FROM product;
+select * FROM ord;
+DROP TABLE review;
+DROP TABLE ord;
+SELECT * FROM ord WHERE o_ostate=1 AND o_id='a';
+SELECT * FROM ord WHERE o_ostate=1 AND o_id='a' order by o_date LIMIT 0,1;
+UPDATE ord SET o_date=current_timestamp() WHERE o_num=11;
